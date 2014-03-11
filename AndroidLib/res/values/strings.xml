@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">AppLib</string>
+	<string name="hello_worldd">Hello world!</string>
+	<string name="menu_settings">Settings</string>
+    <string name="power_info">Power level = %1$s; source = %2$s</string>
+    <string name="warn_appexiting">App is finishing. Please wait...</string>
+    <string name="timepicker_broken">Can not recreate dialog</string>
+    <string name="empty"> </string>
+    <string name="dialog_crash_title">Oops. Unexpected error :(</string>
+    <string name="dialog_crash_message">App should be closed. Please relaunch app. Session will be restored.</string>
+
+</resources>

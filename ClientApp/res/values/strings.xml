@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Po.Grom</string>
+    <string name="app_projectid">po-grom</string>
+    <string name="title_main"></string>
+    <string name="title_fatalerror">OOPS...</string>
+    <string name="message_fatalerror">Critical error has occurred. Sorry :(</string>
+    <string name="btn_send_message">Надіслати</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_clear_message">Очистити</string>
+    <string name="hint_message">Tекст повідомлення</string>
+    <string name="hint_phone">Контактний телефон</string>
+    <string name="hint_username">Як звертатися</string>
+    <string name="notification_message">Повідомлення відправляється...</string>
+    <string name="text_no_gps">GPS</string>
+    <string name="text_no_inet">Интернет</string>
+    <string name="taskinfo_sms_start">Відправляється через sms...</string>
+    <string name="taskinfo_sms_sent">Відправлено. Доставляється...</string>
+    <string name="taskinfo_sms_gereric">Не відправлено. Виникла помилка.</string>
+    <string name="taskinfo_sms_noservice">Не відправлено. sms-сервіс недоступний.</string>
+    <string name="taskinfo_sms_nopdu">Не відправлено. Данні sms відсутні</string>
+    <string name="taskinfo_sms_radiooff">Не відправлено. sms-сервіс вимкнено.</string>
+    <string name="taskinfo_sms_canceled">Відмінено.</string>
+    <string name="taskinfo_inet_start">Відправляється...</string>
+    <string name="taskinfo_inet_fail">Не відправлено. Виникла помилка.</string>
+    <string name="taskinfo_ok">Повідомлення відправлено</string>
+    <string name="taskinfo_global_fail">За відсутності Інтернету та sms-сервісу відправлення неможливе.</string>
+    <string name="taskinfo_gps_wait">Отримуються координати. Не вимикайте GPS.</string>
+    <string name="taskinfo_sms_timeout">Час очікування перевищено. Можливо виникла помилка.</string>
+    <string name="info_calcsms">За відсутності інтрнету текст буде вдправлено в %1$s sms.</string>
+    <string name="info_mk_gps">Увімкніть GPS.</string>
+    <string name="info_nowaytosend">Немає ні sms-сервісу, ні інтернету. Передача неможлива :(</string>
+    <string name="info_wait_send">Триває хвилина паузи після віправлення.</string>
+    <string name="info_need_phone">Вкажіть контактний телефон.</string>
+    <string name="info_nogpssignal">GPS координати ще не визначені.</string>
+    <string name="info_need_text">Повідомлення має містити текст.</string>
+    <string name="info_phone_bad">Телефон має містити не менш 10 цифр.</string>
+    <string name="btn_cancel_track">Відмінити SOS</string>
+    <string name="btn_stop_track">Зупинити SOS</string>
+    <string name="btn_start_track">SOS</string>
+    <string name="track_status_starting">До активаціі SOS залишилось  %1$s  с.</string>
+    <string name="track_status_working">Наступне повідомлення через  %1$s  хв.</string>
+    <string name="title_photo_source">Виберіть джерело зображення</string>
+    <string name="info_photo_noway">Неможливо відправити фото без інтернету</string>
+    <string name="taskinfo_photos_wait">Надсилаються фото</string>
+    <string name="track_status_nextundef">декілька хвилин</string>
+    <string name="hint_contacts">Інші способи зв\'язку</string>
+
+</resources>

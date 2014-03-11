@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity">
+
+    <FrameLayout
+            android:id="@+id/topLay"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bg_titlebar">
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/botLay"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_toolbar">
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/centLay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_app"
+            android:layout_below="@+id/topLay"
+            android:layout_above="@+id/botLay">
+    </FrameLayout>
+
+</RelativeLayout>

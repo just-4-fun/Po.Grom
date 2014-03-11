@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="cyua.android.smsserver"
+          android:versionCode="4"
+          android:versionName="1.04-beta">
+
+
+<uses-sdk
+            android:minSdkVersion="8"
+            android:targetSdkVersion="19"/>
+
+    <application
+            android:name=".App"
+            android:icon="@drawable/icon"
+            android:label="@string/app_name"
+            android:allowBackup="true"
+            android:restoreAnyVersion="true"
+            android:backupAgent="cyua.android.core.BackupAgent"
+            android:theme="@style/AppBaseTheme">
+        <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"
+                android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <service android:name="cyua.android.core.keepalive.KeepAliveService$KeepAliveDaemon">
+        </service>
+        <receiver android:name="cyua.android.smsserver.SmsService$Receiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--to access TELEPHONY_SERVICE to get uid and phone-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="cyua.android.core"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <uses-sdk
+            android:minSdkVersion="8"
+            android:targetSdkVersion="19"/>
+
+    <application
+            android:label="@string/app_name">
+        <provider
+                android:name="cyua.android.core.misc.CachedFileProvider"
+                android:authorities="just4fun.mailattach.provider">
+        </provider>
+
+        <!--This bilow block should be added to each manifest of the project that uses Play library. See: http://developer.android.com/google/play-services/setup.html-->
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version"/>
+
+    </application>
+</manifest>

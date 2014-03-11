@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Po.Grom SmsS</string>
+    <string name="app_projectid">po-grom</string>
+    <string name="title_main"></string>
+    <string name="title_fatalerror">OOPS...</string>
+    <string name="message_fatalerror">Critical error has occurred. Sorry :(</string>
+    <string name="btn_stop_message">Остановити сервіс</string>
+    <string name="btn_ok">OK</string>
+    <string name="hint_message">Tекст повідомлення...</string>
+    <string name="text_sentcounter">Відіслано:</string>
+    <string name="text_pendcounter">В черзі:</string>
+    <string name="notification_message">Сервіс повідомлень працює...</string>
+
+</resources>

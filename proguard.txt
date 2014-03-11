@@ -1,0 +1,32 @@
+#
+# My ads
+#
+-keep class * extends android.app.Application {
+void onCreate();
+}
+#
+-keep class cyua.android.core.CacheVar
+-keep class * extends cyua.android.core.CacheVar
+#
+-keepclassmembers class * extends cyua.java.shared.ObjectSh {
+<fields>;
+}
+#
+-keepclassmembers class * {
+static *** I;
+}
+-keep class * extends cyua.android.core.ui.UiCore {
+    public <init>(...);
+}
+-keep class * extends cyua.android.core.ui.UiStateCore
+
+
+-forceprocessing
+-dontobfuscate
+-printconfiguration proguard_logs/config.txt
+
+#-verbose
+#-dump proguard_logs/class_files.txt
+#-printseeds proguard_logs/seeds.txt
+#-printusage proguard_logs/unused.txt
+#-printmapping proguard_logs/mapping.txt

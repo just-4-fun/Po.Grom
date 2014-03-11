@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:background="@drawable/bg_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+    <LinearLayout
+            android:id="@+id/contentLay"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <cyua.android.core.ui.HintTextField
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageET"
+                android:layout_gravity="center"
+                android:hint="@string/hint_message"
+                android:layout_margin="10dp"
+                style="@style/HintEditText"
+                android:inputType="textMultiLine"/>
+
+        <LinearLayout
+                android:id="@+id/photoLay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp">
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photo1Btn"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_photo_add"
+                    android:background="@null"
+                    android:adjustViewBounds="true"
+                    />
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photo2Btn"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_photo_add"
+                    android:background="@null"
+                    android:adjustViewBounds="true"
+                    />
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photo3Btn"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_photo_add"
+                    android:background="@null"
+                    android:adjustViewBounds="true"
+                    />
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photo4Btn"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_photo_add"
+                    android:background="@null"
+                    android:adjustViewBounds="true"
+                    />
+
+
+        </LinearLayout>
+
+        <cyua.android.core.ui.HintTextField
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userET"
+                android:hint="@string/hint_username"
+                style="@style/HintEditText"
+                android:inputType="textMultiLine"
+                android:layout_margin="10dp"
+                />
+
+        <cyua.android.core.ui.HintNumField
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/phoneET"
+                android:hint="@string/hint_phone"
+                style="@style/HintEditText"
+                android:inputType="textMultiLine"
+                android:layout_margin="10dp"
+                />
+
+        <cyua.android.core.ui.HintTextField
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/contactsET"
+                android:hint="@string/hint_contacts"
+                style="@style/HintEditText"
+                android:inputType="textMultiLine"
+                android:layout_margin="10dp"
+                />
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/infoTV"
+                android:textColor="@color/red_a80"
+                android:textStyle="bold|italic"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom"
+                android:layout_marginLeft="5dp"/>
+
+    </LinearLayout>
+
+
+</ScrollView>

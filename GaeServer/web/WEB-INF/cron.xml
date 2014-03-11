@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/tic</url>
+    <description>Tic every minute</description>
+    <schedule>every 1 minutes</schedule>
+    <timezone>Europe/Kiev</timezone>
+  </cron>
+</cronentries>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="cyua.android.client"
+          android:versionCode="6"
+          android:versionName="1.06-beta">
+
+    <uses-sdk
+            android:minSdkVersion="8"
+            android:targetSdkVersion="19"/>
+
+    <!--Backup key is required-->
+    <application
+            android:name=".App"
+            android:icon="@drawable/icon"
+            android:label="@string/app_name"
+            android:allowBackup="true"
+            android:restoreAnyVersion="true"
+            android:backupAgent="cyua.android.core.BackupAgent"
+            android:theme="@style/AppBaseTheme">
+        <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"
+                android:windowSoftInputMode="stateAlwaysHidden"
+                android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <service android:name="cyua.android.core.keepalive.KeepAliveService$KeepAliveDaemon"></service>
+
+    </application>
+
+    <uses-feature android:name="android.hardware.location" android:required="false"/>
+    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <!--to access TELEPHONY_SERVICE to get uid and phone-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--to save photos-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+</manifest>

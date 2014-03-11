@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+        >
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            >
+
+        <FrameLayout
+                android:id="@+id/logoLay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:padding="2dp">
+
+            <!--
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LOGO"
+                            />
+            -->
+        </FrameLayout>
+
+        <LinearLayout
+                android:id="@+id/RLay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                >
+
+            <!--
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:text="Right"
+                            android:id="@+id/button"
+                            android:visibility="visible"/>
+            -->
+
+        </LinearLayout>
+
+
+        <HorizontalScrollView
+                android:id="@+id/LScroller"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/RLay"
+                android:layout_toRightOf="@+id/logoLay"
+                android:layout_alignWithParentIfMissing="true"
+                android:padding="0dp"
+                >
+
+            <LinearLayout
+                    android:id="@+id/LLay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="0dp">
+
+                <!--
+                            <Button
+                                    android:layout_width="100dp"
+                                    android:layout_height="fill_parent"
+                                    android:text="Left"
+                                    android:id="@+id/button"
+                                    />
+                -->
+
+                <TextView
+                        android:id="@+id/titleTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textSize="18sp"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:textColor="#80FFFFFF"
+                        />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/CLay"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal">
+
+<!--
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:text="Center"
+                android:id="@+id/button"
+                android:visibility="visible"/>
+-->
+
+    </LinearLayout>
+
+
+</FrameLayout>
