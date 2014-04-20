@@ -470,7 +470,7 @@ public static <Cls, Param> Class<? extends Param> getGenericParamClass(Class<? e
 		if (clas != superclassOfHostClass) {hostClass = clas; continue;}
 		// else
 		Type type = hostClass.getGenericSuperclass();
-		if (!(type instanceof ParameterizedType)) throw new Exception("Target superclass is not parametrized.");
+		if (!(type instanceof ParameterizedType)) throw new Exception("Target superclass "+superclassOfHostClass.getSimpleName()+" of class "+hostClass.getSimpleName()+" is not parametrized  with "+gegnericParamSuperclass.getSimpleName());
 		targetGenericSuperclass = (ParameterizedType) type;
 		break;
 	}

@@ -13,7 +13,7 @@ import java.util.Map;
 import static cyua.java.shared.Column.RowidColumn;
 
 
-public abstract class ObjectSh implements Serializable, Cloneable
+public abstract class ObjectSh<DbTable> implements Serializable, Cloneable
 {
 private static final String TAG = "ObjectSh";
 private static final long serialVersionUID = 7263206395995704575L;
@@ -145,10 +145,13 @@ public static <DbObject extends ObjectSh> Schema<DbObject> getSchema(Class<DbObj
 	// convert INDEX info
 	schema.indexMap = new HashMap<String, List<Column>>();
 	if (ixMap.size() > 0) {
-		for (int $ = 0; $ < ixMap.size(); $++) {
-			List<Column> cols = ixMap.get($);
+//		for (int $ = 0; $ < ixMap.size(); $++) {
+		for (Map.Entry<Integer, List<Column>> pair : ixMap.entrySet()) {
+			List<Column> cols = pair.getValue();
 			String name = "";
-			for (Column col : cols) name += (name.length() > 0 ? "_" : "") + col.name;
+			for (Column col : cols) {
+				name += (name.length() > 0 ? "_" : "") + col.name;
+			}
 			schema.indexMap.put(name, cols);
 		}
 	}

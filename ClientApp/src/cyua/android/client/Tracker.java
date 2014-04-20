@@ -112,7 +112,7 @@ private void tik() {
 				LocationService.setMode(Mode.ECONOM);
 				if (ok) {
 					((UiState) UiService.getUiState()).clearPhotos();
-					new UiCore.UiAction(Ui.UiOp.UPDATE_THUMBS).execute();
+					new UiCore.UiAction(Ui.UiOp.UPDATE_PAGE).execute();
 				}
 				requestTik(TIK_SPAN);
 			}

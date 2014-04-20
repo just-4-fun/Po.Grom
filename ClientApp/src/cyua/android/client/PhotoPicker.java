@@ -233,7 +233,7 @@ static class PhotoProcessor extends Sequence {
 			Wow.v(TAG, "processPhoto", "newW = " + resized.getWidth(), "newH = " + resized.getHeight(), "newDensity = " + resized.getDensity(), "bytes = " + file.length(), "uri = " + getPhotoUri(thumbIx));
 	}
 	@Override protected void onFinish(boolean isOk) {
-		new UiCore.UiAction(Ui.UiOp.UPDATE_THUMBS).execute();
+		new UiCore.UiAction(Ui.UiOp.UPDATE_PAGE).execute();
 		state.processing = false;
 //		if (pickerWr.get() != null) pickerWr.get().updateState();
 	}

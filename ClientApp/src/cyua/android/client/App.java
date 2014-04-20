@@ -4,14 +4,19 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import cyua.android.core.AppCore;
 import cyua.android.core.BackupAgent;
+import cyua.android.core.db.DbService;
 import cyua.android.core.inet.InetService;
 import cyua.android.core.inet.RmiUtils;
 import cyua.android.core.keepalive.KeepAliveService;
 import cyua.android.core.location.LocationService;
 import cyua.android.core.log.LogService;
 import cyua.android.core.log.Wow;
+import cyua.android.core.map.MapService;
 import cyua.android.core.misc.Tool;
 import cyua.android.core.ui.UiHelper;
 import cyua.android.core.ui.UiService;
@@ -44,10 +49,21 @@ static {
 		App.addService(LogService.instantiate(), false);
 		LogService.setPersistAgentClass(LogPersistAgent.class);
 		App.addService(KeepAliveService.instantiate().keepCpu().keepMemo().notification(MainActivity.class, R.drawable.status_logo, R.string.app_name, R.string.notification_message), false);
+		App.addService(DbService.instantiate(Db.class), false);
 		App.addService(InetService.instantiate(), false);
 		App.addService(UiService.instantiate(Ui.class, UiState.class), false);
 		App.addService(LocationService.instantiate(), false);// TODO tiks after exit
-	} catch (Throwable ex) {Wow.e(ex);}
+		if (isPlayServiceAvailable()) {
+			App.addService(MapService.instantiate(Mapa.class), false);
+		}
+		} catch (Throwable ex) {Wow.e(ex);}
+}
+
+static boolean isPlayServiceAvailable() {
+	return getGooglePlayServiceStatus() == ConnectionResult.SUCCESS;
+}
+static int getGooglePlayServiceStatus() {
+	return GooglePlayServicesUtil.isGooglePlayServicesAvailable(AppCore.context());
 }
 
 @Override protected void startInit() {
@@ -77,7 +93,8 @@ static {
 			RmiUtils.rmiRequest(rmi, App.getRmiUrl(), InitRmi.Response.class);
 			if (rmi.isSuccess() && Tool.notEmpty(rmi.response)) {
 				hasServerData = true;
-				if (Tool.notEmpty(rmi.response.phones)) Settings.operators.set(rmi.response.phones);
+				Settings.operators.set(rmi.response.phones);
+				Settings.types.set(rmi.response.types);
 				Settings.S3_KEY_ID = rmi.response.p1;
 				Settings.S3_KEY = rmi.response.p2;
 				Settings.S3_BUCKET = rmi.response.p3;
@@ -118,7 +135,7 @@ static String initDeviceUID() {
 	}
 	App.deviceUidVar.set(uid);
 	//
-	if (D) Wow.v(TAG, "initDeviceUID", "uid = " + uid, "type = " + type);
+	if (D) Wow.v(TAG, "initDeviceUID", "uid = " + uid, "typeIndex = " + type);
 	return type + uid;
 }
 static String getPhone() {

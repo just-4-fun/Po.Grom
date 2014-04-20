@@ -217,6 +217,7 @@ private void doPause(boolean yes) {
 	if (gpsSource != null) gpsSource.destroy();
 	if (netSource != null) netSource.destroy();
 	if (pasSource != null) pasSource.destroy();
+	tiker.clear();
 }
 @Override public void onExitFinish(AppCore app) throws Throwable {
 	listeners.clear();

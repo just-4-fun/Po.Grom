@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.Locale;
 
 import cyua.android.core.inet.InetRequest;
+import cyua.android.core.inet.InetService;
 import cyua.android.core.log.Wow;
 import cyua.android.core.misc.Tool;
+import cyua.android.core.ui.UiCore;
+import cyua.android.core.ui.UiService;
 import cyua.java.shared.objects.MessageSh;
 
 import static cyua.android.core.AppCore.D;
@@ -28,15 +31,31 @@ static final String GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/
 
 
 // Using native Android API
+public static void assignGeocode() {
+	new InetService.InetSequence() {
+		@Override protected void doInBackground() throws Exception {
+			UiState stt = (UiState) UiService.getUiState();
+			String[] geodata = geocode(stt.mapLat, stt.mapLng);
+			stt.region = geodata[0];
+			stt.city = geodata[1];
+			stt.address = geodata[2];
+		}
+		@Override protected void onSuccess() throws Exception {
+			new UiCore.UiAction(Ui.UiOp.UPDATE_PAGE).execute();
+		}
+	};
+}
+
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public static void geocode(MessageSh msg) {
-	if (msg.lat == 0) return;
+public static String[] geocode(double lat, double lng) {
+	String[] geodata = new String[3];
+	if (lat == 0) return geodata;
 	try {
 		boolean isPresent = App.apiVersion < 9 || Geocoder.isPresent();
 		Geocoder gc = new Geocoder(App.context(), new Locale("uk"));
-		List<Address> addresses = gc.getFromLocation(msg.lat, msg.lng, 2);
+		List<Address> addresses = gc.getFromLocation(lat, lng, 2);
 		if (addresses.isEmpty())
-			throw new Exception("Can not geocode message lat= " + msg.lat + "; lng= " + msg.lng + ";  geocode is ? " + isPresent);
+			throw new Exception("Can not geocode message lat= " + lat + "; lng= " + lng + ";  geocode is ? " + isPresent);
 		String country = null, region = null, city = null, address = null, tmp = null;
 		for (int $ = addresses.size() - 1; $ >= 0; $--) {
 			Address adr = addresses.get($);
@@ -44,10 +63,12 @@ public static void geocode(MessageSh msg) {
 			if (tmp != null) country = adr.getCountryName();
 			tmp = adr.getAdminArea();
 			if (tmp != null) region = tmp;
+			tmp = adr.getLocality();
+			if (tmp != null) city = tmp;
 			if (adr.getMaxAddressLineIndex() > 0) address = adr.getAddressLine(0);
 		}
-		if (country != null && !country.equals("Україна")) msg.region = country;
-		else {msg.region = region; msg.city = city; msg.address = address;}
+		if (country != null && !country.equals("Україна")) geodata[0] = country;
+		else {geodata[0] = region; geodata[1] = city; geodata[2] = address;}
 /*
 		Address adr = addresses.get(0);
 		StringBuilder str = new StringBuilder();
@@ -71,14 +92,16 @@ public static void geocode(MessageSh msg) {
 		if (D) Wow.v(TAG, "geocodeMessaga", str.toString());
 */
 	} catch (Exception ex) {Wow.e(ex);}
+	return geodata;
 }
 
 
 
 // CODE MIRRORS SAME SERVER CODE
-public static void geocode_2(MessageSh msg) {
-	if (msg.lat == 0) return;
-	String url = GeocodeResponse.getUrl(msg.lat, msg.lng);
+public static String[] geocode_2(double lat, double lng) {
+	String[] geodata = new String[3];
+	if (lat == 0) return geodata;
+	String url = GeocodeResponse.getUrl(lat, lng);
 	InetRequest.Options opts = new InetRequest.Options(url)
 			.maxAttempts(4)
 			.maxDuration(10000)
@@ -90,15 +113,12 @@ public static void geocode_2(MessageSh msg) {
 	if ((Tool.notEmpty(result))) {
 		GeocodeResponse geoRes = new Gson().fromJson(result, GeocodeResponse.class);
 		if ("OK".equals(geoRes.status)) {
-			String[] geodata = geoRes.getRegionCityAddress();
-			msg.region = geodata[0];
-			msg.city = geodata[1];
-			msg.address = geodata[2];
+			geodata = geoRes.getRegionCityAddress();
 			if (D) Wow.v(TAG, "geocode", "Geo = " + Tool.join(geodata, ", "), "data=" + geoRes);
 		}
 		else if (D) Wow.v(TAG, "geocode", "failed with status " + geoRes.status);
 	}
-
+	return geodata;
 }
 
 static String getUrl(double lat, double lng) {
@@ -107,7 +127,7 @@ static String getUrl(double lat, double lng) {
 			.append("latlng=").append(lat).append(",").append(lng).append('&')
 			.append("sensor=true").append('&')
 			.append("language=uk").append('&')
-			.append("result_type=street_address|route|sublocality|locality|administrative_area_level_2");//.append('&')
+			.append("result_type=street_address|route|sublocality|locality|administrative_area_level_1|administrative_area_level_2");//.append('&')
 //			.append("location_type=ROOFTOP|RANGE_INTERPOLATED");//GEOMETRIC_CENTER|APPROXIMATE
 	return url.toString();
 }

@@ -72,13 +72,19 @@ public Ui(ActivityCore _cxt, LinkedList _actionStack, Object cfg, Bundle savedSt
 @Override protected UiTransition processExtraAction(UiAction action) throws Exception {
 	UiTransition trans = null;
 	switch ((UiOp) action.op) {
-		case UPDATE_THUMBS:
+		case UPDATE_PAGE:
 			Fragment f = getFragment(PanelManager.Panel.CENTER);
-			if (f != null && f instanceof Fmt.PageMain) ((Fmt.PageMain)f).updateThumbs();
+			if (f != null && f instanceof Fmt.PageMain) ((Fmt.PageMain)f).updatePage();
 			break;
 		case APPLY_USER_INPUT:
-			Fragment f2 = getFragment(PanelManager.Panel.CENTER);
-			if (f2 != null && f2 instanceof Fmt.PageMain) ((Fmt.PageMain)f2).applyUserInput();
+			f = getFragment(PanelManager.Panel.CENTER);
+			if (f != null && f instanceof Fmt.PageMain) ((Fmt.PageMain)f).applyUserInput();
+			break;
+		case OPEN_MAP:
+			trans = new UiTransition(action, Mapa.class) { @Override public void onSuccess() { } };
+			break;
+		case LOCATION_SELECTED:
+			new UiAction(UiCoreOp.BACK).execute();
 			break;
 //		case SEND_TASK:
 ////			trans = new UiTransition(action, Fmt.PageTaskInfo.class) { @Override public void onSuccess() { } };
@@ -105,7 +111,7 @@ public Ui(ActivityCore _cxt, LinkedList _actionStack, Object cfg, Bundle savedSt
 /** UIOPs */
 
 public static enum UiOp {
-	APPLY_USER_INPUT, UPDATE_THUMBS
+	APPLY_USER_INPUT, UPDATE_PAGE, OPEN_MAP, LOCATION_SELECTED
 }
 
 

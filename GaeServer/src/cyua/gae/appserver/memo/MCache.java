@@ -24,7 +24,7 @@ public static enum CacheKeys {
 	APP_READY,
 	DAY_LAST_TIC,
 	LAST_FTDB_INIT,
-	BACKEND_LAST_CALL, BACKEND_MS_USED, CFG_LAST_CHK,
+	BACKEND_LAST_CALL, BACKEND_MS_USED, CFG_LAST_CHK, CFG_TYPES,
 }
 
 // ===================================================

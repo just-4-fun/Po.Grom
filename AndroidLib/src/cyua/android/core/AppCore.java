@@ -392,8 +392,8 @@ protected void finishExit() {
 	try {AppHelper.clearSingletons();} catch (Throwable ex) {}
 	try {Wow.writeCache();} catch (Throwable ex) {}
 	state.set(Bit.EXITED_$);
+	recycle();
 	if (killOnExit) kill();
-	else recycle();
 }
 protected void recycle() {
 	ListIterator<AppService> iterator = services.listIterator();
@@ -580,12 +580,12 @@ public void onActivityDestroyed(ActivityCore _activity) {
 	for (AppService service : services) {
 		try {service.onActivityDestroyed(_activity, cause);} catch (Throwable ex) { Wow.e(ex); }
 	}
-	// exit
-	checkMayExit();
 }
 void onActivityDestroyFinished(ActivityCore _activity) {
 	// due to glich in API 2.3 (FragmentActivity try to call Ui after destroy)
 	if (_activity == activity.get()) activity = new WeakReference<ActivityCore>(null);
+	// exit
+	checkMayExit();
 }
 
 public String getCause(Activity _activity) {

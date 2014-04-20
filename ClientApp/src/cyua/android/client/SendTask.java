@@ -1,16 +1,12 @@
 package cyua.android.client;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
-import android.os.Build;
 import android.telephony.SmsManager;
 
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -20,7 +16,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,10 +24,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
-import cyua.android.core.inet.InetRequest;
 import cyua.android.core.inet.InetService;
 import cyua.android.core.inet.RmiUtils;
 import cyua.android.core.keepalive.KeepAliveService;
@@ -98,28 +91,33 @@ SendTask() {
 		// Send photos
 		List<String> photoLinks = InetService.isOnline() ? sendPhotos() : null;
 		// Get fix
-		Fix fix = waitFix();
-		if (D) Wow.v(TAG, "doInBackground", "fix = " + fix);
-		LocationService.setMode(LocationService.Mode.ECONOM);
+		UiState state = (UiState) UiService.getUiState();
+		boolean realLcn = true;
+		if (state.mapLat == 0) {
+			Fix fix = waitFix();
+			if (D) Wow.v(TAG, "doInBackground", "fix = " + fix);
+			LocationService.setMode(LocationService.Mode.ECONOM);
+			//
+			realLcn = fix.isActual(60000);
+			state.mapLat = fix.lat; state.mapLng = fix.lng;
+		}
 		//
 		String text = Settings.msg.text.get();
 		String uid = Settings.uid.get();
 		String user = Settings.user.get();
 		String phone = Settings.phone.get();
 		String extra = Settings.contacts.get();
-		double lat = fix.lat, lng = fix.lng;
-		boolean realLcn = fix.isActual(60000);
-		boolean sos = Tracker.isActive();
+		int type = Tracker.isActive() ? MessageSh.SOS_INDEX : state.type.index;
 		//
 		if (InetService.isOnline()) {
-			MessageSh msg = MessageSh.create(0, uid, user, phone, text, lat, lng, realLcn, sos);
+			MessageSh msg = MessageSh.create(0, uid, user, phone, text, state.mapLat, state.mapLng, realLcn, type);
 			msg.extra = extra;
 			assignPhotos(msg, photoLinks);
 			assignGeocode(msg, realLcn);
 			sendViaInet(msg);
 		}
 		else if (App.hasTelephony() && App.canSMS()) {
-			String sms = MessageSh.toSms(0, uid, user, phone, text, lat, lng, realLcn, sos);
+			String sms = MessageSh.toSms(0, uid, user, phone, text, state.mapLat, state.mapLng, realLcn, type);
 			sendViaSms(sms);
 		}
 		else setStatus(R.string.taskinfo_global_fail);
@@ -280,7 +278,12 @@ public byte[] getBytes(InputStream inputStream) throws IOException {
 
 private void assignGeocode(MessageSh msg, boolean actualLcn) {
 	try {
-		GeocodeResponse.geocode(msg);
+		UiState state = (UiState) UiService.getUiState();
+		if (Tool.notEmpty(state.region)) {
+			msg.region = state.region;
+			msg.city = state.city;
+			msg.address = state.address;
+		}
 		if (!actualLcn) msg.address = "востаннє зафіксовано";
 	} catch (Exception ex) {Wow.e(ex);}
 }

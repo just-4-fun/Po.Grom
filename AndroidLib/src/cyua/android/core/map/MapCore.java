@@ -129,6 +129,7 @@ protected void onUnavailable()
 
 private void assignOpts()
 {
+	if (opts == null) opts = defaultOpts;
 	setRetainInstance(opts.features.has(Features.fRETAIN));
 	mapView.setMapType(opts.mapType);
 	mapView.setTrafficEnabled(opts.features.has(Features.fTRAFFIC));

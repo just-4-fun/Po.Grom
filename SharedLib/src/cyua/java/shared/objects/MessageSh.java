@@ -19,6 +19,8 @@ import static cyua.java.shared.Column.RowidColumn;
  */
 public class MessageSh extends ObjectSh {
 private static final String TAG = "cyua.MessageSh";
+public static final String SOS_MARKER = "phone";
+public static final int SOS_INDEX  = 911;
 @Override public String getStorableID() {
 	return uid +"-"+_id;// TODO
 }
@@ -61,16 +63,16 @@ public static final Column MARKER = new Column(1360);
 public String marker;
 public static final Column COLOR = new Column(1361);
 public String color;
-// STATUS
-public static final Column RELIAB = new Column(510).localName("Надійнисть");
-public String reliab;
+// TYPE
+public static final Column TYPE = new Column(410).localName("Тип");
+public String type;
 // FILTERS
 //public static final Column ACTUAL = new Column(610);
 //public String actual;
 //public static final Column CHAN1 = new Column(620);
 //public Integer chan1;
 // CONTENT
-public static final Column FLAGS = new Column(410).localName("Тип");
+public static final Column FLAGS = new Column(510).localName("Надійнисть");
 public String flags;
 public static final Column TEXT = new Column(412).localName("Текст");
 public String text;
@@ -102,7 +104,7 @@ public String mnth;
 //public static String __ = "|", REPLFROM = "\\|", REPLTO = ";";
 //public static String __ = "\r", REPLFROM = "\r", REPLTO = "\n";
 public static String __ = "¡", REPLFROM = __, REPLTO = ";";
-public static enum Flag {LOCAT_AVAIL, SOS}
+public static enum Flag {LOCAT_AVAIL}
 
 public static String[] getTemplateColumnNames() {
 	return new String[]{
@@ -118,14 +120,14 @@ public static Column[] getSmsCols() {
 	};
 }
 
-public static MessageSh create(long id, String uid, String user, String phone, String text, double lat, double lng, boolean actualLcn, boolean sos) {
+public static MessageSh create(long id, String uid, String user, String phone, String text, double lat, double lng, boolean actualLcn, int type) {
 	MessageSh m = new MessageSh();
 	m._id = id; m.uid = uid; m.user = user; m.phone = phone;
 	m.lat = lat; m.lng = lng;
 	m.text = text;
+	m.type = type+"";
 	//
 	BitState flags = new BitState();
-	if (sos) flags.set(Flag.SOS);
 	if (actualLcn) flags.set(Flag.LOCAT_AVAIL);
 	m.flags = flags.getValue() + "";
 	return m;
@@ -150,6 +152,7 @@ public static MessageSh fromSms(String sms) {
 		m.flags = p[6];
 		m.lat = toDouble(p[7]);
 		m.lng = toDouble(p[8]);
+		m.type = p[9];
 		return m;
 	} catch (Exception ex) {
 		m.uid = null;
@@ -158,14 +161,13 @@ public static MessageSh fromSms(String sms) {
 	return m;
 }
 
-public static String toSms(long id, String uid, String user, String phone, String text, double lat, double lng, boolean actualLcn, boolean sos) {
+public static String toSms(long id, String uid, String user, String phone, String text, double lat, double lng, boolean actualLcn, int type) {
 	BitState flags = new BitState();
-	if (sos) flags.set(Flag.SOS);
 	if (actualLcn) flags.set(Flag.LOCAT_AVAIL);
 	text = text.replaceAll(REPLFROM, REPLTO);
 	text = SmsUtils.encodeCyr(text);
 	user = SmsUtils.encodeCyr(user);
-	String sms = __ + id + __ + uid + __ + user + __ + phone + __ + text + __ + flags.getValue() + __ + lat + __ + lng + __;
+	String sms = __ + id + __ + uid + __ + user + __ + phone + __ + text + __ + flags.getValue() + __ + lat + __ + lng + __+ type + __;
 	// set signature
 	String sign = Phantom.signPayload(sms, 6);
 	sms = sign + sms;

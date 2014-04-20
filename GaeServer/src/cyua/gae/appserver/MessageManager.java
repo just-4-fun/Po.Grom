@@ -1,28 +1,25 @@
 package cyua.gae.appserver;
 
-import com.google.appengine.api.capabilities.Capability;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import cyua.gae.appserver.fusion.FTDB;
 import cyua.gae.appserver.fusion.FTOperation;
 import cyua.gae.appserver.fusion.FTTable;
 import cyua.gae.appserver.memo.MCache;
-import cyua.gae.appserver.urlfetch.Credentials;
+import cyua.gae.appserver.memo.Memo;
 import cyua.gae.appserver.urlfetch.HttpRequest;
 import cyua.gae.appserver.urlfetch.HttpResponse;
-import cyua.gae.appserver.urlfetch.NVPair;
-import cyua.gae.appserver.urlfetch.NVPairs;
-import cyua.gae.appserver.urlfetch.Scope;
 import cyua.java.shared.BitState;
 import cyua.java.shared.RMIException;
+import cyua.java.shared.objects.ConfigSh;
 import cyua.java.shared.objects.MessageSh;
+import sun.misc.resources.Messages;
 
-import static cyua.java.shared.objects.MessageSh.DATETIME;
 import static cyua.java.shared.objects.MessageSh.Flag;
-import static cyua.java.shared.objects.MessageSh.UID;
 
 
 public class MessageManager {
@@ -34,12 +31,11 @@ private static final String pointOpenTag = "<Point><coordinates>";
 private static final String pointCloseTag = "</coordinates></Point>";
 private static final String lineOpenTag = "<LineString><coordinates>";
 private static final String lineCloseTag = "</coordinates></LineString>";
-
+private static ConfigSh.Type[] types;
 
 public static boolean save(String device_id, MessageSh msg) throws RMIException {
 	BitState flags = new BitState(Tool.toInt(msg.flags));
 	boolean realLcn = flags.has(Flag.LOCAT_AVAIL);
-	boolean sos = flags.has(Flag.SOS);
 	String updateRowid = null;
 	byte reliab = 0;
 	// LOCATION and GEOCODE
@@ -50,18 +46,19 @@ public static boolean save(String device_id, MessageSh msg) throws RMIException 
 		else reliab++;
 	}
 	else reliab--;
-	msg.marker = realLcn ? "donut" : "forbidden";
+//	msg.marker = realLcn ? "donut" : "forbidden";
 	// PHONE check
 	if (msg.phone != null && msg.phone.startsWith("+038")) reliab++;
-	msg.reliab = reliab + "";
+	msg.flags = reliab + "";
 	// DATETIME
 	long time = Tool.notEmpty(msg.datetime) ? Tool.toLong(msg.datetime) : 0;
 	if (time == 0) time = Tool.now();
 	msg.datetime = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS", time);
 	msg.mnth = String.format("%1$tY%1$tm", time);
 	// SOS
-	if (sos) {
-		msg.flags = "http://s3-eu-west-1.amazonaws.com/pg-pub/ic_sos.png";
+	if (Tool.safeEquals(msg.type, MessageSh.SOS_INDEX + "")) {
+		msg.type = "http://s3-eu-west-1.amazonaws.com/pg-pub/ic_sos.png";
+		msg.marker = MessageSh.SOS_MARKER;
 		MessageSh oldMsg = MCache.getObject(MessageSh.class, msg.uid);
 		if (oldMsg != null && oldMsg.rowid != null) {
 			updateRowid = oldMsg.rowid;
@@ -74,7 +71,13 @@ public static boolean save(String device_id, MessageSh msg) throws RMIException 
 			msg.location = joinLocations(oldMsg.location, msg.lat, msg.lng, msg.location);
 		}
 	}
-	else msg.flags = "";
+	else {
+		ConfigSh.Type tp = getTypeByIndex(msg.type);
+		if (tp != null) {
+			msg.type = tp.name;
+			msg.marker = tp.marker;
+		}
+	}
 	//
 	FTTable tab = FTDB.getMsgTable();
 	if (updateRowid != null) {
@@ -143,7 +146,7 @@ static class GeocodeResponse {
 				.append("latlng=").append(lat).append(",").append(lng).append('&')
 				.append("sensor=true").append('&')
 				.append("language=uk").append('&')//uk
-				.append("result_type=street_address|route|sublocality|locality|administrative_area_level_2");//.append('&')
+				.append("result_type=street_address|route|sublocality|locality|administrative_area_level_1|administrative_area_level_2");//.append('&')
 //			.append("location_type=ROOFTOP|RANGE_INTERPOLATED");//GEOMETRIC_CENTER|APPROXIMATE
 		return url.toString();
 	}
@@ -195,6 +198,26 @@ private static class AddressComponent {
 	String long_name;
 	String short_name;
 	// etc ex geometry
+}
+
+
+
+public static void onConfigUpdate(ConfigSh cfg) {
+	if (cfg.types == null) cfg.types = "[]";
+	if (!cfg.types.startsWith("[")) cfg.types = "[" + cfg.types + "]";
+	types = new Gson().fromJson(cfg.types, ConfigSh.Type[].class);
+	MCache.saveValue(MCache.CacheKeys.CFG_TYPES, types);
+}
+static ConfigSh.Type getTypeByIndex(String ix) {
+	try {
+		if (types == null) types = MCache.getValue(MCache.CacheKeys.CFG_TYPES);
+		if (types == null) FTDB.loadConfig();
+		if (types == null) return null;
+		for (ConfigSh.Type tp : types) {
+			if (String.valueOf(tp.index).equals(ix)) return tp;
+		}
+	} catch (Exception ex) {log.severe("[getTypeByIndex]: " + Tool.stackTrace(ex));}
+	return null;
 }
 
 

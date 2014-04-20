@@ -157,11 +157,12 @@ final void exit() {
 public static <T extends ObjectSh> DbTable<T> getTable(Class<T> objClass) {
 	DbTable<T> table = (DbTable<T>) I.tableMap.get(objClass);
 	//
-	if (table == null) Wow.e(new Exception("Table of"+objClass.getSimpleName()+" should be registered before usage."));
-//		try {
-//		Class<? extends DbTable<T>> tabClas = (Class<? extends DbTable<T>>) Tool.getGenericParamClass(objClass, ObjectSh.class, Object.class);
-//		table = (DbTable<T>) registerTable(tabClas);
-//	} catch (Exception ex) {Wow.e(ex);}
+//	if (table == null) Wow.w("DbCore", "getTable", "Table of "+objClass.getSimpleName()+" should be registered before usage.");
+	if (table == null) Wow.e(new Exception("Table of "+objClass.getSimpleName()+" should be registered before usage."));
+		try {
+		Class<? extends DbTable<T>> tabClas = (Class<? extends DbTable<T>>) Tool.getGenericParamClass(objClass, ObjectSh.class, Object.class);
+		table = (DbTable<T>) registerTable(tabClas);
+	} catch (Exception ex) {Wow.e(ex);}
 	return table;
 }
 

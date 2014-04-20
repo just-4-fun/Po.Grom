@@ -1,6 +1,7 @@
 package cyua.android.client;
 
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.wifi.WifiManager;
@@ -82,6 +83,7 @@ public static class PageMain extends UiFragment {
 	Tiker<Op> tiker;
 	ToolbarCore toolBar, titleBar;
 	TextView infoTV;
+	Button typeBtn, mapBtn;
 	HintTextField messageET, userET, contactsET;
 	HintNumField phoneET;
 	boolean msgChanged = true;
@@ -95,6 +97,7 @@ public static class PageMain extends UiFragment {
 	StringBuilder tmpInfo = new StringBuilder();
 
 	@Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
+		uiState = (UiState) UiService.getUiState();
 		View root = inflater.inflate(R.layout.page_main, container, false);
 		messageET = (HintTextField) root.findViewById(R.id.messageET);
 		phoneET = (HintNumField) root.findViewById(R.id.phoneET);
@@ -102,6 +105,19 @@ public static class PageMain extends UiFragment {
 		userET = (HintTextField) root.findViewById(R.id.userET);
 		infoTV = (TextView) root.findViewById(R.id.infoTV);
 		photoLay = (LinearLayout) root.findViewById(R.id.photoLay);
+		typeBtn = (Button) root.findViewById(R.id.typeBtn);
+		typeBtn.setOnClickListener(new View.OnClickListener() {
+			@Override public void onClick(View v) {onTypeBtnClick();}
+		});
+		typeBtn.setText(Tool.isEmpty(uiState.type) ? UiHelper.string(R.string.btn_type) : uiState.type.name);
+		mapBtn = (Button) root.findViewById(R.id.mapBtn);
+		if (App.isPlayServiceAvailable()) {
+			mapBtn.setOnClickListener(new View.OnClickListener() {
+				@Override public void onClick(View v) {onOpenMapClick();}
+			});
+			mapBtn.setText(getAddressInfo());
+		}
+		else mapBtn.setVisibility(View.GONE);
 		//
 		phoneET.setAsHint(Settings.phone.get(), "0000000000");
 		if (App.isPhoneReal()) phoneET.setEnabled(false);
@@ -294,7 +310,7 @@ public static class PageMain extends UiFragment {
 		//
 		String text = Tool.asString(messageET.getText());
 		Tool.setTimer();
-		String msg = MessageSh.toSms(012345, Settings.uid.get(), Settings.user.get(), Settings.phone.get(), text, 30.01234567891234, 30.01234567891234, true, true);
+		String msg = MessageSh.toSms(012345, Settings.uid.get(), Settings.user.get(), Settings.phone.get(), text, 30.01234567891234, 30.01234567891234, true, 911);
 		int[] res = SmsMessage.calculateLength(msg, false);
 //				if (D) Wow.v(TAG, "calcSmsInfo", "Num = "+res[0], "unitsUsed = "+res[1], "unitsRemains = "+res[2], "codeSize = "+res[3]);
 //		if (D) Wow.v(TAG, "calcSmsInfo", "calc sms time = "+Tool.getTimer(true), "text = "+msg);
@@ -333,21 +349,36 @@ public static class PageMain extends UiFragment {
 		requestTik();
 		Tracker.start();
 	}
+	private void onTypeBtnClick() {
+		new TypeSelectorDialog().show();
+	}
+	private void onOpenMapClick() {
+		Settings.msg.text.set(messageET.getValue());
+		saveUserSettings();
+		new UiAction(Ui.UiOp.OPEN_MAP).execute();
+	}
 	private void clearMsg() {
 		Settings.clearMessage();
 		messageET.setAsHint("");
-		updateThumbs();
+		updatePage();
 	}
 	private void saveUserSettings() {
 		if (!App.isPhoneReal()) Settings.phone.set(phoneET.getValue());
 		Settings.user.set(userET.getValue());
 		Settings.contacts.set(contactsET.getValue());
 	}
-	public void updateThumbs() {
-		photo1.updateState();photo2.updateState();photo3.updateState();photo4.updateState();
+	public void updatePage() {
+		photo1.updateState(); photo2.updateState(); photo3.updateState(); photo4.updateState();
+		typeBtn.setText(Tool.isEmpty(uiState.type) ? UiHelper.string(R.string.btn_type) : uiState.type.name);
+		mapBtn.setText(getAddressInfo());
 	}
 	public void applyUserInput() {
 		Settings.msg.text.set(messageET.getValue());
+	}
+	public String getAddressInfo() {
+		String title = UiHelper.string(uiState.mapLat == 0 ? R.string.btn_location : R.string.btn_location_ok);
+		if (Tool.notEmpty(uiState.region)) title = uiState.region + ", " + uiState.city + ", " + uiState.address;
+		return title;
 	}
 
 }
@@ -432,7 +463,7 @@ static abstract class SimpleWatcher implements TextWatcher {
 
 /** MISC */
 
-private static Button createToolButton(int titleRid) {
+static Button createToolButton(int titleRid) {
 	return createIconButton(titleRid, R.drawable.button_icon, R.color.while_a80);
 }
 private static Button createIconButton(int titleRid, int iconRid, int colorRid) {

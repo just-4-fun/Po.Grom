@@ -9,7 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 
 
-public class Fix extends ObjectSh {
+public class Fix extends ObjectSh<Fix.FixTable> {
 private static final long serialVersionUID = -5870911024588890645L;
 // types
 //TODO depends on Earth elipsoid location

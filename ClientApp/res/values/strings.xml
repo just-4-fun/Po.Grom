@@ -45,5 +45,9 @@
     <string name="taskinfo_photos_wait">Надсилаються фото</string>
     <string name="track_status_nextundef">декілька хвилин</string>
     <string name="hint_contacts">Інші способи зв\'язку</string>
+    <string name="btn_location">Вказати місце на карті</string>
+    <string name="btn_location_ok">Місце вказано</string>
+    <string name="btn_type">Вид події</string>
+    <string name="title_select_type">Оберіть тип</string>
 
 </resources>

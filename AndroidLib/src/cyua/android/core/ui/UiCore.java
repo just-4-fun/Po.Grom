@@ -22,6 +22,7 @@ import java.util.List;
 import cyua.android.core.ActivityCore;
 import cyua.android.core.AppCore;
 import cyua.android.core.log.Wow;
+import cyua.android.core.map.MapCore;
 import cyua.android.core.misc.Tiker;
 
 import static cyua.android.core.AppCore.D;
@@ -301,8 +302,8 @@ private void cancelUiTransition() {
 	panels.finishTransition(false);
 }
 @Override public boolean requestManualTransition(Panel panel, Action act, boolean left2right) {
-
 	if (panel != Panel.CENTER || act != Action.PAGE || !left2right) return true;// not allow open/close action
+	else if (MapCore.class.isAssignableFrom(getCenterFragmentClass())) return true; // not allow on map
 	new UiAction(UiCoreOp.BACK).manual().execute();
 	//		if (tp.isLeftPanel()) tp.assignPage(null, false); else tp.assignPage(null, true);
 	return true;// not allow open/close action

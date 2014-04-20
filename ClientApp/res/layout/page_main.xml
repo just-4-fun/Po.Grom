@@ -25,6 +25,24 @@
                 style="@style/HintEditText"
                 android:inputType="textMultiLine"/>
 
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/typeBtn"
+                android:text="@string/btn_type"
+                android:textColor="@color/while_a80"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"/>
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mapBtn"
+                android:text="@string/btn_location"
+                android:textColor="@color/while_a80"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"/>
+
         <LinearLayout
                 android:id="@+id/photoLay"
                 android:layout_width="match_parent"

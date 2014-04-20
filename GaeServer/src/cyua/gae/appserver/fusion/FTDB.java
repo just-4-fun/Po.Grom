@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import cyua.gae.appserver.MessageManager;
 import cyua.gae.appserver.Tool;
 import cyua.gae.appserver.fusion.FTOperation.FTException;
 import cyua.gae.appserver.fusion.FTTable.FTTableDescription;
@@ -220,6 +221,7 @@ public static ConfigSh loadConfig() {
 		ConfigSh cfg = list.get(0);
 		if (cfg != null && cfg.operators != null) cfg.operators = cfg.operators.replaceAll(" ", "");
 		Memo.save(cfg);
+		MessageManager.onConfigUpdate(cfg);
 		return cfg;
 	} catch (Exception ex) {log.severe("[loadConfig]: " + Tool.stackTrace(ex)); return null;}
 }

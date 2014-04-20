@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MarkerObject extends ObjectSh
+public class MarkerObject extends ObjectSh<MarkerTable>
 {
 private static final long serialVersionUID = -5079249238971611083L;
 private static final String TAG = MarkerObject.class.getSimpleName();

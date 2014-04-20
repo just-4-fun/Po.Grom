@@ -2,10 +2,19 @@ package cyua.android.client;
 
 import android.net.Uri;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import cyua.android.core.CacheVar;
 import cyua.android.core.log.Wow;
 import cyua.android.core.misc.EasyList;
+import cyua.android.core.misc.Tool;
 import cyua.android.core.ui.UiService;
+import cyua.java.shared.objects.ConfigSh;
 
 import static cyua.android.core.CacheVar.ArrayVar;
 import static cyua.android.core.CacheVar.LongVar;
@@ -23,6 +32,7 @@ public static long msgWaitTime = 0;//TODO 1*60*1000L;// after this time new mess
 
 // CACHE VARS
 public static ArrayVar operators;
+public static ArrayVar types;
 public static StringVar uid;
 public static StringVar user;
 public static StringVar phone;
@@ -62,6 +72,27 @@ public static void clearMessage() {
 	msg.remove();
 	UiState state = (UiState) UiService.getUiState();
 	state.clearPhotos();
+	state.type = null;
+	state.mapLat = state.mapLng = 0;
+	state.region = state.city = state.address = null;
+}
+
+public static List<ConfigSh.Type> getTypes() {
+	List<ConfigSh.Type> list = new ArrayList<ConfigSh.Type>();
+	if (Tool.notEmpty(types.get())) {
+		for (String str : types.get()) {
+			ConfigSh.Type tp = new Gson().fromJson(str, ConfigSh.Type.class);
+			if (tp != null && Tool.notEmpty(tp.name)) list.add(tp);
+		}
+		Collections.sort(list, new Comparator<ConfigSh.Type>() {
+			@Override public int compare(ConfigSh.Type cur, ConfigSh.Type nxt) {
+				if (cur.index == nxt.index) return 0;
+				else if (cur.index > nxt.index) return 1;
+				return -1;
+			}
+		});
+	}
+	return list;
 }
 
 }

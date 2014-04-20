@@ -24,7 +24,7 @@ public static MarkerTable registerType(MarkerType typeInst)
 
 static MarkerTable onMapCreate(MarkerLayer layer)
 {
-	if (I == null) DbCore.registerTable(MarkerTable.class);
+	if (I == null) I = (MarkerTable)DbCore.registerTable(MarkerTable.class);
 	I.layer = layer;
 	for (MarkerType type : I.types.values()) type.onMapCreate(layer);
 	return I;

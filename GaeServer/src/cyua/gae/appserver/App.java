@@ -1,7 +1,6 @@
 package cyua.gae.appserver;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.capabilities.CapabilitiesService;
@@ -16,7 +15,6 @@ import cyua.gae.appserver.fusion.FTDB;
 import cyua.gae.appserver.memo.MCache;
 import cyua.gae.appserver.memo.MCache.CacheKeys;
 import cyua.gae.appserver.urlfetch.Account;
-import cyua.java.shared.Phantom;
 
 import static cyua.java.shared.Phantom.Gae;
 
@@ -35,7 +33,7 @@ public static boolean isRealVersion;
 public static boolean isBackend;
 public static int instanceId;
 //browser key cy.entry po-grom
-public static final String apiKey = Gae.APP_APIKEY;
+public static final String apiKey = Gae.APP_BROWSER_APIKEY;
 //server api key cy.entry po-grom : LIMITED 2500 requests per 24 hours
 public static final String serverApiKey = Gae.APP_SERVER_APIKEY;
 //

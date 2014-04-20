@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="cyua.android.client"
-          android:versionCode="6"
-          android:versionName="1.06-beta">
+          android:versionCode="8"
+          android:versionName="1.08-beta">
 
     <uses-sdk
             android:minSdkVersion="8"
@@ -28,13 +28,26 @@
             </intent-filter>
         </activity>
         <service android:name="cyua.android.core.keepalive.KeepAliveService$KeepAliveDaemon"></service>
+        <meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyBdoIl4WB4JQ32LdYermN4XSiVb_LVHU7M"/>
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
 
     </application>
 
     <uses-feature android:name="android.hardware.location" android:required="false"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
 
+    <permission
+            android:name="just4fun.cyme.android.client.permission.MAPS_RECEIVE"
+            android:protectionLevel="signature"/>
+
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="just4fun.cyme.android.client.permission.MAPS_RECEIVE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>

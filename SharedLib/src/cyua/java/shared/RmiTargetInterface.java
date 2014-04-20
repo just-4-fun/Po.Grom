@@ -18,6 +18,7 @@ public static class InitRmi extends Rmi<InitRmi.Request, InitRmi.Response> {
 	}
 	public static class Response extends Rmi.RmiResponse {
 		public String phones;
+		public String types;
 		public String p1, p2, p3, p4, p5, p6;
 	}
 }

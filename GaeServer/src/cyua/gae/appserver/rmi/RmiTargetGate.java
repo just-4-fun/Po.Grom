@@ -23,8 +23,7 @@ import static cyua.java.shared.Phantom.Gae;
 // WARNING support RMIResponse till all devices will be upgraded
 
 
-public class RmiTargetGate extends RmiGateBase
-{
+public class RmiTargetGate extends RmiGateBase {
 static final Logger log = Logger.getLogger(RmiTargetGate.class.getName());
 //
 
@@ -34,26 +33,28 @@ public String device_id;
 
 
 @Override
-protected void unpackExtra(JsonObject jobj)
-{
+protected void unpackExtra(JsonObject jobj) {
 //	uid = Tool.objectFromJson(jobj, RmiTargetInterface.DEVICE_EXTRA_PARAM, DeviceShd.class);
 }
 
-/***  Rmi IMPLEMENTATIONS */
+/** Rmi IMPLEMENTATIONS */
 
 class InitRmi extends RmiTargetInterface.InitRmi {
 	@Override public void response() throws RMIException {
-		log.info("    < < < <   [InitRmi invoke] response = "+ Tool.printObject(request));
+		log.info("    < < < <   [InitRmi invoke] response = " + Tool.printObject(request));
 		response.p1 = Gae.AWS_ACCESS_KEY_ID;
-		response.p2 = Gae.AWS_SECRET_KEY ;
+		response.p2 = Gae.AWS_SECRET_KEY;
 		response.p3 = Gae.AWS_BUCKET;
 		response.p4 = Gae.AWS_REGION;
 		response.p5 = Gae.AWS_HOST;
 		response.p6 = String.format("%1$tY%1$tm%1$td", Tool.now());
 		//
 		ConfigSh cfg = FTDB.getConfig();
-		response.phones = cfg == null ? null : cfg.operators;
-		// TODO photo size
+		if (cfg != null) {
+			response.phones = cfg.operators;
+			response.types = cfg.types;
+			// TODO photo size
+		}
 	}
 }
 
@@ -62,7 +63,7 @@ class InitRmi extends RmiTargetInterface.InitRmi {
 
 class MessageSendRmi extends RmiTargetInterface.MessageSendRmi {
 	@Override public void response() throws RMIException {
-		log.info("    < < < <   [EventsSaveRmi invoke] response = "+ Tool.printObject(request));
+		log.info("    < < < <   [EventsSaveRmi invoke] response = " + Tool.printObject(request));
 		response.ok = MessageManager.save(device_id, request.message);
 	}
 }
@@ -77,7 +78,6 @@ class LogsSendRmi extends RmiTargetInterface.LogsSendRmi {
 		response.ok = true;
 	}
 }
-
 
 
 }
