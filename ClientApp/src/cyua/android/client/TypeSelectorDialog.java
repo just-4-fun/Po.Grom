@@ -27,7 +27,7 @@ import cyua.java.shared.objects.ConfigSh;
 public class TypeSelectorDialog extends FloatUiConnector {
 List<ConfigSh.Type> types;
 
-public TypeSelectorDialog() { }// Default required
+public TypeSelectorDialog() { }// Default required  +
 
 @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
 	types = Settings.getTypes();
