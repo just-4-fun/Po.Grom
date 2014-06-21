@@ -3,21 +3,18 @@ package cyua.gae.appserver;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.gson.Gson;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import cyua.gae.appserver.fusion.FTDB;
 import cyua.gae.appserver.fusion.FTOperation;
 import cyua.gae.appserver.fusion.FTTable;
 import cyua.gae.appserver.memo.MCache;
-import cyua.gae.appserver.memo.Memo;
 import cyua.gae.appserver.urlfetch.HttpRequest;
 import cyua.gae.appserver.urlfetch.HttpResponse;
 import cyua.java.shared.BitState;
 import cyua.java.shared.RMIException;
 import cyua.java.shared.objects.ConfigSh;
 import cyua.java.shared.objects.MessageSh;
-import sun.misc.resources.Messages;
 
 import static cyua.java.shared.objects.MessageSh.Flag;
 

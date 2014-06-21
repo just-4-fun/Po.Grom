@@ -68,7 +68,7 @@ protected void onInit(DbCore _db) {
 		else {
 			indexCursor = db.select("PRAGMA index_list(" + tableName() + ")", null);
 			if (indexCursor == null) throw new Exception("Can't load index info. Error=" + db.getLastError());
-			onUpgrade(infoCursor, infoCursor);
+			onUpgrade(infoCursor, indexCursor);
 		}
 		onOpen();
 		//
@@ -169,8 +169,9 @@ protected void onUpgrade(Cursor infoCursor, Cursor indexCursor) throws Exception
 	String oldTable = "_" + tableName();
 	String q = "ALTER TABLE " + tableName() + " RENAME TO " + oldTable;
 	if (!db.execSql(q)) throw new Exception("Can't alter table. SQL=" + q + ". Error=" + db.getLastError());
-	// create empty new table and indexes
-	onCreate();
+	//
+	onCreate();// create empty new table and INDEXES
+	//
 	// copy old values to new table
 	q = "INSERT INTO " + tableName() + "(" + newColsStr + ") SELECT " + oldColsStr + " FROM " + oldTable;
 	if (!db.execSql(q)) throw new Exception("Can't copy data. SQL=" + q + ". Error=" + db.getLastError());
